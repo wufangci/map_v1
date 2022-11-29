@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tjaljaking masalut</title>
+    <meta charset="utf-8" name="description" content="" />
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1f00d0beadf87bad7d275c174616e048f8b573fc/dist/aframe-master.min.js"></script>
+    <script src="https://recast-api.donmccurdy.com/aframe-inspector-plugin-recast.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script>
+    <script src="./js/aframe-room-component.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/colinfizgig/aframe_Components/components/camera-cube-env.js"></script>
+    <script src="./js/showInfo.js"></script>
+    <script src="./js/sound.js"></script>
+  </head>
+  <body>
+    <!-- inspector-plugin-recast	來自不會穿牆的套件  -->
+    <a-scene background="color: #B6B6B6" inspector-plugin-recast>
+      <a-asset>
+        <!-- 音訊來源 賽嘉歌謠 ----------------------------------------------------------->
+        <audio
+          id="bg-music"
+          src="./assets/sound/masalu.mp3"
+          preload="true"
+        ></audio>
+
+        <!--textures 來源 -------------------------------------------------------------->
+
+        <img
+          crossorigin="anonymous"
+          id="plane"
+          alt=""
+          src="https://cdn.glitch.global/ad7d685d-6e86-4924-af13-1fd32aaf5c4f/TexturesCom_Plaster_Plain_2K_roughness.png?v=1666455409343"
+        />
+
+        <!-- models 來源 ------------------------------------------------------------->
+        <a-asset-item
+          id="bench"
+          src="./assets/model/novel_double_bench/scene.gltf"
+        >
+        </a-asset-item>
+        <a-asset-item
+          id="bench2"
+          src="./assets/model/concrete_bench/scene.gltf"
+        >
+        </a-asset-item>
+        <a-asset-item id="radio" src="./assets/model/radio/scene.gltf">
+        </a-asset-item>
+        <a-asset-item id="nav" src="./assets/model/navmesh.gltf"></a-asset-item>
+        <a-asset-item id="roof" src="./assets/model/stage_roof/scene.gltf">
+        </a-asset-item>
+        <!--  動畫旋轉模組     -------------------------------------------------------->
+        <a-mixin
+          id="animation__rotation"
+          animation__rotation="
+          property:rotation; 
+          dur:3000;
+          loop:true; 
+          to: 0 360 0; "
+        >
+        </a-mixin>
+        <!--  map imgs     -------------------------------------------------------->
+        <img
+          crossorigin="anonymous"
+          id="60s01"
+          alt=""
+          src="https://cdn.glitch.global/567041ba-c5d4-4c6b-b328-f190d972a758/60s01.jpeg?v=1669748265827"
+        />
+
+        <img
+          crossorigin="anonymous"
+          id="70s01"
+          alt=""
+          src="https://cdn.glitch.global/567041ba-c5d4-4c6b-b328-f190d972a758/70s01.jpeg?v=1669748270549"
+        />
+
+        <img
+          crossorigin="anonymous"
+          id="70s02"
+          alt=""
+          src="https://cdn.glitch.global/567041ba-c5d4-4c6b-b328-f190d972a758/70s02.jpeg?v=1669748274052"
+        />
+        <img
+          crossorigin="anonymous"
+          id="890s01"
+          alt=""
+          src="https://cdn.glitch.global/567041ba-c5d4-4c6b-b328-f190d972a758/890s01.jpeg?v=1669748277193"
+        />
+      </a-asset>
+
+      <!--  賽嘉古調歌曲 -------------------------------------------------------------->
+
+      <a-sound src="#bg-music" firstsound></a-sound>
+
+      <!--  限制走動範圍 model -------------------------------------------------------->
+
+      <a-gltf-model src="#nav" nav-mesh visible="false"> </a-gltf-model>
+
+      <!--  場景光線設定 -------------------------------------------------------------->
+
+      <!-- :: 基本環境燈光 ------------------------------------>
+      <a-light
+        id="dir"
+        position="-1 2 -2"
+        type="directional"
+        color="white"
+        intensity="0.1"
+        light="cast-shadow:true"
+      >
+      </a-light>
+
+      <a-light
+        id="spot"
+        position="11.10129 26.79882 6.3928"
+        rotation="-90.000 0 0"
+        type="spot"
+        color="#FAE497"
+        light="castShadow: true; angle: 42.55; intensity: 0.19"
+      >
+      </a-light>
+
+      <a-light
+        id="hemi"
+        type="hemisphere"
+        color="#E3D4C5"
+        ground-color="#C7C7C7"
+        position="0 11 -2"
+        intensity="0.9"
+      >
+      </a-light>
+
+      <!-- 房間 rooms  --------------------------------------------------------------->
+
+      <rw-room
+        id="main-room"
+        material="color: #F9F9F9"
+        length="12"
+        width="16"
+        height="6"
+        position="-5 0 -5"
+      >
+        <rw-wall position="2 0 0" material="" wall rotation>
+          <!-- door-main -->
+          <rw-doorhole id="door-main"> </rw-doorhole>
+          <rw-doorlink
+            from="#door-main"
+            to="#door-second"
+            material="color:#CCC"
+            position="1.7 0 0"
+            width="1.8"
+            height="3"
+          >
+            <rw-sides></rw-sides>
+            <rw-ceiling></rw-ceiling>
+          </rw-doorlink>
+        </rw-wall>
+        <rw-wall material="" wall rotation> </rw-wall>
+        <rw-wall material="" wall rotation> </rw-wall>
+        <rw-wall material="" wall rotation> </rw-wall>
+      </rw-room>
+      <rw-room
+        id="second-room"
+        material="color: #F9F9F9"
+        length="5"
+        width="12"
+        height="6"
+        position="-5 0 -10.2"
+      >
+        <rw-wall material=""></rw-wall>
+        <rw-wall material=""></rw-wall>
+        <rw-wall material="">
+          <rw-doorhole id="door-second" height="4"> </rw-doorhole>
+        </rw-wall>
+        <rw-wall></rw-wall>
+      </rw-room>
+
+      <!-- 展間地板  ------------------------------------------------------------------>
+      <!-- 
+      <a-plane
+        id="floor"
+        rotation="-90 0 0"
+        width="30"
+        height="45"
+        src="#floortexture"
+        material="repeat: 3 3; metalness:0.25; roughness:2"
+        shadow
+      >
+      </a-plane> -->
+
+      <!-- 天花板 -->
+      <a-gltf-model
+        id="model_roof"
+        position="0.33702 8 -15.73992"
+        src="#roof"
+        camera-cube-env="distance: 100000; resolution: 257.01; roughness: 5.35"
+        scale="0.0013 0.0015 0.001"
+        rotation="90 0 0"
+        material="color: #F9F9F9"
+        color="white"
+        shadow
+      >
+      </a-gltf-model>
+
+      <a-plane
+        id="floor"
+        rotation="-90 0 0"
+        width="30"
+        height="45"
+        src="#plane"
+        crossorigin="anonymous"
+        material="repeat: 3 3; metalness:0; roughness:0.5"
+        shadow
+      >
+      </a-plane>
+
+      <!-- 3D物件實體   ---------------------------------------------------------------->
+
+      <a-entity id="radio" position="0 1.30276 0" rotation="">
+        <a-gltf-model
+          position="3.73527 0.15191 1.17418"
+          id="radiomodel"
+          mixin="animation__rotation"
+          scale="0.003 0.003 0.003"
+          rotation="0 45 0"
+          src="#radio"
+          camera-cube-env="distance: 100000; 
+    resolution: 64"
+          shadow
+          material=" metalness:-1; roughness:2"
+        >
+        </a-gltf-model>
+
+        <a-box
+          position="3.57793 -0.64543 1.23296"
+          color="#ccc"
+          width="2"
+          height="0.8"
+          depth="5"
+          shadow=""
+          material=""
+          geometry="width: 1.29; height: 1.29; depth: 1.2"
+        ></a-box>
+      </a-entity>
+
+      <!-- 照片實體位置   -------------------------------------------------------------->
+      <!-- 60 年代 -->
+
+      <a-entity id="60s_wrap" position="-4.07161 3 -1" rotation="0 90 0">
+        <a-entity
+          id="60s_long_box"
+          rotation=""
+          position="-1.27548 -1.07322 -0.833"
+          geometry="depth: 0.14; height: 0.06; width: 9.04"
+          material="color: #f3f2f2"
+          shadow
+        ></a-entity>
+        <a-entity
+          id="60s_wrap_img_main"
+          material="src: #60s01;  emissive: #0d0d0d; color: #F9F9F9"
+          position="-2.00947 0.00379 -0.98755"
+          geometry="depth: 0.17; height: 6.08; width: 12.04"
+        ></a-entity>
+      </a-entity>
+
+      <!-- 70 年代  -->
+
+      <!-- 70 年代 第二區  -->
+
+      <a-entity
+        id="70s_wrap"
+        position="0.10724 2.8 6.07385"
+        rotation="0 -180 0"
+      >
+        <a-entity
+          id="70s_long_box"
+          rotation=""
+          position="-6.18812 -0.866 10.97645"
+          geometry="depth: 0.14; height: 0.06; width: 12.32"
+          material="color: #f3f2f2"
+          shadow=""
+        ></a-entity>
+
+        <a-entity
+          id="70s_wrap_img_main"
+          material="src: #70s01; emissive: #050505; color: #FAFAFA"
+          position="-4.17901 0.12266 11.11602"
+          geometry="depth: 0.16; height: 6.08; width: 13.43"
+          rotation=""
+        ></a-entity>
+      </a-entity>
+
+      <a-entity
+        id="70sv2_wrap"
+        position="0.10724 2.8 6.07385"
+        rotation="0 -180 0"
+      >
+        <a-entity
+          id="70sv2_long_box"
+          rotation="0 90 0"
+          position="-10.73398 -0.866 5.55368"
+          geometry="depth: 0.14; height: 0.06; width: 13"
+          material="color: #f3f2f2"
+          shadow=""
+        ></a-entity>
+
+        <a-entity
+          id="70sv2_wrap_img_main"
+          material="src: #70s02;  emissive: #0d0d0d; color: #f5f3eb"
+          position="-10.93699 0.18914 5.02876"
+          geometry="depth: 0.16; height: 6.08; width: 11.93"
+          rotation="0 90 0"
+        ></a-entity>
+      </a-entity>
+
+      <!-- 890 年代  -->
+      <a-entity
+        id="890s_wrap"
+        position="0.10724 2.8 18.03914"
+        rotation="0 -180 0"
+      >
+        <a-entity
+          id="890s_long_box"
+          rotation=""
+          position="-1.80495 -0.866 11.20468"
+          geometry="depth: 0.14; height: 0.06; width: 12.32"
+          material="color: #f3f2f2"
+          shadow=""
+        ></a-entity>
+
+        <a-entity
+          id="890s_wrap_img_main"
+          material="src: #890s01;  emissive: #0d0d0d; color: #f5f3eb"
+          position="-2.9053 0.12266 11.11602"
+          geometry="depth: 0.16; height: 6.08; width: 16.08"
+          rotation=""
+        ></a-entity>
+      </a-entity>
+
+      <a-entity
+        id="rig"
+        position="0 0 5"
+        movement-controls="constrainToNavMesh: true"
+      >
+        <a-entity camera position="0 2 0" look-controls>
+          <a-entity
+            cursor="rayOrigin: mouse;"
+            raycaster="objects: .interactable"
+          ></a-entity>
+          <!-- <a-plane
+            id="infocard"
+            position="0 0 -0.1"
+            color="black"
+            opacity="0.7"
+            visible="false"
+          >
+            <a-plane
+              position="0 0 0.01"
+              color="white "
+              width="0.07"
+              height="0.1"
+            >
+              <a-text
+                id="title"
+                value="title..."
+                width="0.1"
+                position="-0.0257 0.022 0.01"
+                shader="msdf"
+                font="https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/oswald/Oswald-Regular.json"
+              >
+              </a-text>
+
+              <a-text
+                id="content"
+                value="content...."
+                wrap-count="30"
+                width="0.03"
+                position="-0.025 0.02 0.01"
+                align="left"
+                color="black "
+                shader="msdf"
+                font="https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/oswald/Oswald-Regular.json"
+              >
+              </a-text>
+            </a-plane>
+          </a-plane> -->
+        </a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
